@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/apple.jar clojure.main -m apple.server "resources/config.edn"
