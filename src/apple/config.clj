@@ -1,6 +1,5 @@
 (ns apple.config
-  (:require [integrant.core :as ig]
-            [environ.core :refer [env]]))
+  (:require [integrant.core :as ig]))
 
 (def db {:dbname   (or (System/getenv "DB_DBNAME") "it_data")
          :user     (or (System/getenv "DB_USER") "myuser")

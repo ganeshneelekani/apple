@@ -1,18 +1,9 @@
 (ns apple.server
-  (:require [apple.config :as a]
-            [reitit.ring :as ring]
+  (:require [apple.config :as a] 
             [ring.adapter.jetty :as jetty]
-            [integrant.core :as ig])
+            [integrant.core :as ig]
+            [apple.router :as r])
   (:gen-class))
-
-(defn app
-  [env]
-  (ring/ring-handler
-   (ring/router
-    [["/"
-      {:get {:handler (fn [req]
-                        {:status 200
-                         :body "Hello Apple"})}}]])))
 
 (defmethod ig/init-key :server/jetty
   [_ {:keys [handler port]}]
@@ -22,7 +13,7 @@
 (defmethod ig/init-key :apple/app
   [_ config]
   (println "\nApp started")
-  (app config))
+  (r/app config))
 
 (defmethod ig/init-key :db/postgres
   [_ config]
