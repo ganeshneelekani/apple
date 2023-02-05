@@ -8,8 +8,14 @@
          :port     (or (System/getenv "DB_PORT") 5432) 
          :dbtype   "postgresql"})
 
+(def migratus-config
+  {:store         :database
+   :migration-dir "migrations"
+   :db            db})
+
 (def config
   {:server/jetty {:handler (ig/ref :apple/app)
                   :port (or (System/getenv "PORT") 3000)}
-   :apple/app {:jdbc-url (ig/ref :db/postgres)}
-   :db/postgres {:jdbc-url "jdbc-url"}})
+   :apple/app {:jdbc-url (ig/ref :db/migratus)}
+   :db/migratus {:jdbc-url (ig/ref :db/postgres)}
+   :db/postgres {:jdbc-url db}})

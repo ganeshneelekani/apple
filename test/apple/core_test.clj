@@ -1,6 +1,6 @@
 (ns apple.core-test
   (:require [clojure.test :refer :all]
-            [apple.core :refer :all]))
+            [apple.server :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
