@@ -4,6 +4,8 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :min-lein-version "2.0.0"
+  :repl-options { :init-ns apple.user
+                  :init (require '[clojure.repl :refer :all])}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [ring "1.9.6"]
                  [integrant "0.8.0"]
@@ -13,7 +15,8 @@
                  [environ "1.2.0"]
                  [clj-http "3.12.3"]
                  [ovotech/ring-jwt "2.3.0"]
-                 [migratus "1.4.9"]]
+                 [migratus "1.4.9"]
+                 [com.github.seancorfield/next.jdbc "1.3.847"]]
   :main ^:skip-aot apple.server
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}

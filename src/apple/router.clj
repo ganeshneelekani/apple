@@ -4,6 +4,7 @@
 
 (defn routes
   [env]
+  (println "-----k----------")
   [["/"
      {:get {:handler (fn [req]
                        {:status 200

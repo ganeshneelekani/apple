@@ -1,7 +1,8 @@
-(ns apple.recipe.routes)
+(ns apple.recipe.routes
+  (:require [apple.recipe.handlers :as handler]))
 
 (defn routes
   [env]
-  ["/recipes" {:get {:handler (fn [req]
-                                 {:status 200
-                                  :body "hello recipes"})}}])
+  (println "-------- env")
+  (let [db (:jdbc-url env)]
+    ["/recipes" {:get {:handler (handler/list-all-recipes db)}}]))
