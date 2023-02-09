@@ -39,4 +39,5 @@
 (defn -main
   []
   (ig/init a/config)
-  (migrate-sql-statements))
+  ;; (migrate-sql-statements) If you are not inserting data while docker srart up
+  )

@@ -18,11 +18,13 @@
 (def app (-> state/system :apple/app))
 (def db (-> state/system :db/postgres))
 
+
 (comment
   (go)
   (app {:request-method :get
         :uri "/v1/recipes"})
   (jdbc/execute! db ["select * from recipe where public = true"])
+
   (sql/find-by-keys db :recipe {:public true})
   (halt)
   (reset)
