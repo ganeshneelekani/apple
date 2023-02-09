@@ -1,9 +1,13 @@
 (ns apple.recipe.db 
-  (:require [next.jdbc.sql :as sql]))
+  (:require [next.jdbc.sql :as sql]
+            [next.jdbc :as jdbc]))
 
 (defn find-all-recipes
-  [db]
-  (println "======T1`=========")
-  (let [public (sql/find-by-keys db :recipe {:public true})
-        _ (println "-----PP-----"public)]
-    {:public public}))
+  [db uid]
+  (with-open [conn (jdbc/get-connection db)]
+    (let [public (sql/find-by-keys conn :recipe {:public true})]
+      (if uid
+        (let [drafts (sql/find-by-keys conn :recipe {:public false :uid uid})]
+          {:public public
+           :drafts drafts})
+        {:public public}))))

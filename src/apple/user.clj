@@ -23,12 +23,21 @@
   (go)
   (app {:request-method :get
         :uri "/v1/recipes"})
+  
+  (app {:request-method :get
+        :uri "/"})
   (jdbc/execute! db ["select * from recipe where public = true"])
 
   (sql/find-by-keys db :recipe {:public true})
   (halt)
   (reset)
   (reset-all)
+  
+  (time 
+   (with-open [conn (jdbc/get-connection db)]
+     {:public (sql/find-by-keys conn :recipe {:public true})
+      :drafts (sql/find-by-keys conn :recipe {:public false 
+                                              :uid "auth0|5ef440986e8fbb001355fd9c"})}))
   )
 
 (comment
