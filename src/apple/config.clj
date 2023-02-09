@@ -16,5 +16,9 @@
 (def config
   {:server/jetty {:handler (ig/ref :apple/app)
                   :port (or (System/getenv "PORT") 3000)}
-   :apple/app {:jdbc-url (ig/ref :db/postgres)}
+   :apple/app {:jdbc-url (ig/ref :db/postgres)
+               :connection (ig/ref :db/connection)}
+   :db/connection {:connection (ig/ref :db/postgres)}
    :db/postgres {:jdbc-url db}})
+
+

@@ -3,8 +3,12 @@
             [ring.adapter.jetty :as jetty]
             [integrant.core :as ig]
             [apple.router :as r]
-            [migratus.core :as m])
+            [migratus.core :as m]
+            [next.jdbc :as jdbc])
   (:gen-class))
+
+(defn create-connection-pool [jdbc-config]
+  (jdbc/get-connection jdbc-config))
 
 (defmethod ig/init-key :server/jetty
   [_ {:keys [handler port]}]
@@ -21,6 +25,16 @@
   (println "\n Configured DB")
   (:jdbc-url config))
 
+
+(defmethod ig/init-key :db/connection
+  [_ config]
+  (println "\n Creating connection ")
+  (create-connection-pool (:connection config)))
+
+
+;; (defmethod ig/halt-key! :db/postgres [_ conn]
+;;   (.close conn))
+
 (defmethod ig/init-key :db/migratus
   [_ config]
   (println "\n Configuring db for migration")
@@ -36,8 +50,11 @@
     (catch Exception e
       (m/rollback a/migratus-config))))
 
+
+(def conn-state (atom {}))
+
 (defn -main
   []
-  (ig/init a/config)
+  (let [system (ig/init a/config)]
   ;; (migrate-sql-statements) If you are not inserting data while docker srart up
-  )
+    system))

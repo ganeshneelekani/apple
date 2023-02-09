@@ -16,7 +16,8 @@
                  [clj-http "3.12.3"]
                  [ovotech/ring-jwt "2.3.0"]
                  [migratus "1.4.9"]
-                 [com.github.seancorfield/next.jdbc "1.3.847"]]
+                 [com.github.seancorfield/next.jdbc "1.3.847"]
+                 [cheshire "5.11.0"]]
   :main ^:skip-aot apple.server
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
