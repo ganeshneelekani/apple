@@ -11,6 +11,17 @@
          :drafts drafts})
       {:public public})))
 
+(defn insert-recipe!
+  [db {:keys [recipe-id uid name prep-time img]}]
+  (println "---EE-----")
+  (sql/insert! db :recipe {:recipe_id recipe-id
+                           :uid uid
+                           :name name
+                           :prep_time prep-time
+                           :public false
+                           :img img
+                           :favorite_count 0}))
+
 (defn find-recipe-by-id
   [conn recipe-id]
   (let [[recipe] (sql/find-by-keys conn :recipe {:recipe_id recipe-id})

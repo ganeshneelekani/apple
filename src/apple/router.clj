@@ -1,17 +1,32 @@
 (ns apple.router
-  (:require [reitit.ring :as ring]
-            [muuntaja.core :as m] 
-            [apple.recipe.routes :as recipe]
-            [reitit.ring.middleware.muuntaja :as muuntaja]
+  (:require [muuntaja.core :as m]
+            [reitit.ring :as ring]
+            [reitit.dev.pretty :as pretty]
             [reitit.coercion.spec :as rspec]
+            [apple.recipe.routes :as recipe]
             [reitit.ring.coercion :as coercion]
+            [reitit.ring.middleware.muuntaja :as muuntaja]
+            [reitit.ring.middleware.multipart :as multipart]
             [reitit.ring.middleware.exception :as exception]))
 
 (def router-config
-  {:data {:coercion rspec/coercion 
-          :middleware [exception/exception-middleware
+  { :exception pretty/exception
+   :data {:coercion rspec/coercion 
+          :muuntaja m/instance
+          :middleware [muuntaja/format-negotiate-middleware
+                           ;; encoding response body
+                       muuntaja/format-response-middleware
+                           ;; exception handling
+                       (exception/create-exception-middleware
+                        {::exception/default (partial exception/wrap-log-to-console exception/default-handler)})
+                           ;; decoding request body
+                       muuntaja/format-request-middleware
+                           ;; coercing response bodys
+                       coercion/coerce-response-middleware
+                           ;; coercing request parameters
                        coercion/coerce-request-middleware
-                       ]}})
+                           ;; multipart
+                       multipart/multipart-middleware]}})
 
 (defn routes
   [env]
@@ -24,8 +39,8 @@
 
 (defn app
   [env]
-  (->
-   (routes env)
-   ring/router
-   ring/ring-handler))
+  (ring/ring-handler
+   (ring/router 
+    (routes env)
+    router-config)))
 

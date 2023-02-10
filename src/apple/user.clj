@@ -41,6 +41,13 @@
   (app {:request-method :get
         :uri "/"})
   
+    (app {:request-method :post
+          :uri "/v1/recipes"
+          :body-params {:name "my recipe"
+                         :prep-time 4
+                         :img "image-url"
+                         :public false}})
+  
   (:require  '[clojure.pprint :refer [pprint]])
   (rrouter/match-by-path router "/v1/recipes/1234-recipe")
   
