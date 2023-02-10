@@ -1,6 +1,17 @@
 (ns apple.router
   (:require [reitit.ring :as ring]
-            [apple.recipe.routes :as recipe]))
+            [muuntaja.core :as m] 
+            [apple.recipe.routes :as recipe]
+            [reitit.ring.middleware.muuntaja :as muuntaja]
+            [reitit.coercion.spec :as rspec]
+            [reitit.ring.coercion :as coercion]
+            [reitit.ring.middleware.exception :as exception]))
+
+(def router-config
+  {:data {:coercion rspec/coercion 
+          :middleware [exception/exception-middleware
+                       coercion/coerce-request-middleware
+                       ]}})
 
 (defn routes
   [env]

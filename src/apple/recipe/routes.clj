@@ -9,5 +9,6 @@
       {:get {:handler (handler/list-all-recipes conn)
              :summary "List all recipes"}}]
      ["/:recipe-id"
-      {:get (handler/retrieve-recipe conn)
-       :summary "Retrieve recipe"}]]))
+      {:get {:handler (handler/retrieve-recipe conn)
+       :parameters {:path {:recipe-id string?}}
+             :summary "Retrieve recipe"}}]]))

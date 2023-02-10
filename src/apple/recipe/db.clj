@@ -4,8 +4,7 @@
 
 (defn find-all-recipes
   [conn uid]
-  (let [public (sql/find-by-keys conn :recipe {:public true})
-        _ (println "-----uid----"uid)]
+  (let [public (sql/find-by-keys conn :recipe {:public true})]
     (if uid
       (let [drafts (sql/find-by-keys conn :recipe {:public false :uid uid})]
         {:public public
