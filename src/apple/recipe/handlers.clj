@@ -19,7 +19,8 @@
   (fn [request]
     (let [recipe-id (str (UUID/randomUUID))
           uid "auth0|5ef440986e8fbb001355fd9c"
-          recipe (-> request :body-params)]
+          recipe (-> request :body-params)
+          _ (println "----request----" (-> request :body-params))]
       (recipe-db/insert-recipe! db (assoc recipe :recipe-id recipe-id :uid uid))
       (rr/created (str base-url "/recipes/" recipe-id) {:recipe-id recipe-id}))))
 
@@ -33,3 +34,22 @@
         (rr/not-found {:type "recipe-not-found"
                        :message "Recipe not found"
                        :data (str "recipe-id " recipe-id)})))))
+
+(defn update-recipe!
+  [db]
+  (fn [request]
+    (let [recipe-id "a3dde84c-4a33-45aa-b0f3-4bf9ac997680" 
+          recipe (-> request :body-params)
+          update-successful? (recipe-db/update-recipe! db (assoc recipe :recipe-id recipe-id))]
+      (if update-successful?
+        (rr/status 204)
+        (rr/not-found {:recipe-id recipe-id})))))
+
+(defn delete-recipe!
+  [db]
+  (fn [request]
+    (let [recipe-id "a3dde84c-4a33-45aa-b0f3-4bf9ac997680"
+          deleted! (recipe-db/delete-recipe! db {:recipe-id recipe-id})]
+      (if deleted!
+        (rr/status 204)
+        (rr/not-found {:recipe-id recipe-id})))))

@@ -10,22 +10,16 @@
             [reitit.ring.middleware.exception :as exception]))
 
 (def router-config
-  { :exception pretty/exception
+  {:exception pretty/exception
    :data {:coercion rspec/coercion 
           :muuntaja m/instance
-          :middleware [muuntaja/format-negotiate-middleware
-                           ;; encoding response body
-                       muuntaja/format-response-middleware
-                           ;; exception handling
+          :middleware [muuntaja/format-negotiate-middleware 
+                       muuntaja/format-response-middleware 
                        (exception/create-exception-middleware
                         {::exception/default (partial exception/wrap-log-to-console exception/default-handler)})
-                           ;; decoding request body
                        muuntaja/format-request-middleware
-                           ;; coercing response bodys
-                       coercion/coerce-response-middleware
-                           ;; coercing request parameters
-                       coercion/coerce-request-middleware
-                           ;; multipart
+                       coercion/coerce-response-middleware 
+                       coercion/coerce-request-middleware 
                        multipart/multipart-middleware]}})
 
 (defn routes

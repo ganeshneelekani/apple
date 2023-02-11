@@ -1,6 +1,5 @@
 (ns apple.recipe.db 
-  (:require [next.jdbc.sql :as sql]
-            [next.jdbc :as jdbc]))
+  (:require [next.jdbc.sql :as sql]))
 
 (defn find-all-recipes
   [conn uid]
@@ -13,7 +12,7 @@
 
 (defn insert-recipe!
   [db {:keys [recipe-id uid name prep-time img]}]
-  (println "---EE-----")
+  (println "-----as  "prep-time)
   (sql/insert! db :recipe {:recipe_id recipe-id
                            :uid uid
                            :name name
@@ -31,5 +30,17 @@
       (assoc recipe
              :recipe/steps steps
              :recipe/ingredients ingredeints))))
+
+(defn update-recipe!
+  [db recipe]
+  (-> (sql/update! db :recipe recipe (select-keys recipe [:recipe-id]))
+      :next.jdbc/update-count
+      (pos?)))
+
+(defn delete-recipe!
+  [db recipe]
+  (-> (sql/delete! db :recipe recipe)
+      :next.jdbc/update-count
+      (pos?)))
 
 
